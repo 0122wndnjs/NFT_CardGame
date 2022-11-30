@@ -29,6 +29,7 @@ export const GlobalContextProvider = ({ children }) => {
     pendingBattles: [],
     activeBattle: null,
   });
+  const [updateGameData, setUpdateGameData] = useState(0);
 
   const navigate = useNavigate();
 
@@ -69,6 +70,7 @@ export const GlobalContextProvider = ({ children }) => {
         provider,
         walletAddress,
         setShowAlert,
+        setUpdateGameData,
       });
     }
   }, [contract]);
@@ -106,7 +108,7 @@ export const GlobalContextProvider = ({ children }) => {
       setGameData({ pendingBattles: pendingBattles.slice(1), activeBattle });
     };
     if (contract) fetchGameData();
-  }, [contract]);
+  }, [contract, updateGameData]);
 
   return (
     <GlobalContext.Provider
