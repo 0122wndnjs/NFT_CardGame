@@ -20,7 +20,7 @@ export const createEventListeners = ({
   setShowAlert,
   setUpdateGameData,
 }) => {
-  const NewPlayerEventFilter = contract.filters.NewPlayer();
+  const NewPlayerEventFilter = contract.filters?.NewPlayer();
 
   AddNewEvent(NewPlayerEventFilter, provider, ({ args }) => {
     console.log("New player created!", args);
