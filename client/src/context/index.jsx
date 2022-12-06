@@ -44,6 +44,16 @@ export const GlobalContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const battlegroundFromLocalStorage = localStorage.getItem('battleground');
+
+    if (battlegroundFromLocalStorage) {
+      setBattleGround(battlegroundFromLocalStorage);
+    } else {
+      localStorage.setItem('battleground', battleGround)
+    }
+  },[])
+
+  useEffect(() => {
     updateCurrentWalletAddress();
     window.ethereum.on("accountsChanged", updateCurrentWalletAddress);
   }, []);
