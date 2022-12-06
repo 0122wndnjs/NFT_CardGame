@@ -47,4 +47,10 @@ export const createEventListeners = ({
     }
     setUpdateGameData((prevUpdateGameData) => prevUpdateGameData + 1);
   });
+
+  const BattleMoveEventFilter = contraft.filters.BattleMove();
+
+  AddNewEvent(BattleMoveEventFilter, provider, ({ args }) => {
+    console.log('Battle move initiated!', args)
+  })
 };
