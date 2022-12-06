@@ -6,17 +6,27 @@ import { CustomButton, PageHOC } from "../components";
 import styles from "../styles";
 
 const JoinBattle = () => {
-  const { contract, gameData, setShowAlert, setBattleName, walletAddress } =
-    useGlobalContext();
+  const {
+    contract,
+    gameData,
+    setShowAlert,
+    setBattleName,
+    walletAddress,
+    setErrorMessage,
+  } = useGlobalContext();
   const navigate = useNavigate();
 
   const handleClick = async (battleName) => {
     setBattleName(battleName);
     try {
       await contract.JoinBattle(battleName);
-      setShowAlert({ status: true, type: 'success', messgae: `Joining ${battleName}`})
+      setShowAlert({
+        status: true,
+        type: "success",
+        messgae: `Joining ${battleName}`,
+      });
     } catch (error) {
-      console.log(error);
+      setErrorMessage(error);
     }
   };
 
