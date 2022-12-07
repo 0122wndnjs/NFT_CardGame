@@ -4,7 +4,8 @@ import { PageHOC, CustomInput, CustomButton } from "../components";
 import { useGlobalContext } from "../context";
 
 const Home = () => {
-  const { contract, walletAddress, setShowAlert } = useGlobalContext();
+  const { contract, walletAddress, setShowAlert, gameData, setErrorMessage } =
+    useGlobalContext();
   const [playerName, setPlayerName] = useState("");
   const navigate = useNavigate();
 
@@ -22,12 +23,13 @@ const Home = () => {
         });
       }
     } catch (error) {
-      setShowAlert({
-        status: true,
-        type: "failure",
-        message: error.message,
-      });
-      alert(error);
+      // setShowAlert({
+      //   status: true,
+      //   type: "failure",
+      //   message: error.message,
+      // });
+      // alert(error);
+      setErrorMessage(error);
     }
   };
 
@@ -41,6 +43,12 @@ const Home = () => {
 
     if (contract) checkForPlayerToken();
   }, [contract]);
+
+  useEffect(() => {
+    if (gameData.activeBattle) {
+      navigate(`/battle/${gameData.activeBattle.name}`);
+    }
+  }, [gameData]);
 
   return (
     <div className="flex flex-col">
