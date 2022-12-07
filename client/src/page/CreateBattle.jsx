@@ -6,7 +6,8 @@ import { useGlobalContext } from "../context";
 import { CustomButton, CustomInput, PageHOC, GameLoad } from "../components";
 
 const CreateBattle = () => {
-  const { contract, battleName, setBattleName, gameData, setErrorMessage } = useGlobalContext();
+  const { contract, battleName, setBattleName, gameData, setErrorMessage } =
+    useGlobalContext();
   const [waitBattle, setWaitBattle] = useState(false);
   const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ const CreateBattle = () => {
 
     try {
       await contract.createBattle(battleName, {
-        gasLimit: 200000
+        gasLimit: 200000,
       });
 
       setWaitBattle(true);

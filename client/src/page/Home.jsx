@@ -15,7 +15,7 @@ const Home = () => {
 
       if (!playerExists) {
         await contract.registerPlayer(playerName, playerName, {
-          gasLimit: 200000
+          gasLimit: 200000,
         });
 
         setShowAlert({
@@ -23,6 +23,8 @@ const Home = () => {
           type: "info",
           message: `${playerName} is being summoned!`,
         });
+
+        setTimeout(() => navigate("/create-battle"), 8000);
       }
     } catch (error) {
       // setShowAlert({

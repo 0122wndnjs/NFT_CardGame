@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import styles from "../styles";
-import { Alert, ActionButton, Card, GameInfo, PlayerInfo } from "../components";
+import { ActionButton, Alert, Card, GameInfo, PlayerInfo } from "../components";
 import { useGlobalContext } from "../context";
 import {
   attack,
@@ -18,16 +18,16 @@ const Battle = () => {
   const {
     contract,
     gameData,
+    battleGround,
     walletAddress,
+    setErrorMessage,
     showAlert,
     setShowAlert,
-    battleGround,
-    setErrorMessage,
     player1Ref,
     player2Ref,
   } = useGlobalContext();
-  const [player1, setPlayer1] = useState({});
   const [player2, setPlayer2] = useState({});
+  const [player1, setPlayer1] = useState({});
   const { battleName } = useParams();
   const navigate = useNavigate();
 
@@ -66,20 +66,29 @@ const Battle = () => {
           health: p1H,
           mana: p1M,
         });
-        setPlayer2({ ...player02, att: "X", def: "X", health: p1H, mana: p1M });
+        setPlayer2({ ...player02, att: "X", def: "X", health: p2H, mana: p2M });
       } catch (error) {
-        setErrorMessage(error);
+        setErrorMessage(error.message);
       }
     };
+
     if (contract && gameData.activeBattle) getPlayerInfo();
   }, [contract, gameData, battleName]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!gameData?.activeBattle) navigate("/");
+    }, [2000]);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const makeAMove = async (choice) => {
     playAudio(choice === 1 ? attackSound : defenseSound);
 
     try {
       await contract.attackOrDefendChoice(choice, battleName, {
-        gasLimit: 200000
+        gasLimit: 200000,
       });
 
       setShowAlert({
@@ -92,14 +101,6 @@ const Battle = () => {
     }
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!gameData?.activeBattle) navigate('/');
-    }, [2000])
-
-    return () => clearTimeout(timer);
-  }, [])
-
   return (
     <div
       className={`${styles.flexBetween} ${styles.gameContainer} ${battleGround}`}
@@ -107,27 +108,31 @@ const Battle = () => {
       {showAlert?.status && (
         <Alert type={showAlert.type} message={showAlert.message} />
       )}
+
       <PlayerInfo player={player2} playerIcon={player02Icon} mt />
 
-      <div className={`${styles.flexCenter} flex-col `}>
+      <div className={`${styles.flexCenter} flex-col my-10`}>
         <Card
           card={player2}
           title={player2?.playerName}
           cardRef={player2Ref}
           playerTwo
         />
+
         <div className="flex items-center flex-row">
           <ActionButton
             imgUrl={attack}
             handleClick={() => makeAMove(1)}
             restStyles="mr-2 hover:border-yellow-400"
           />
+
           <Card
             card={player1}
             title={player1?.playerName}
             cardRef={player1Ref}
             restStyles="mt-3"
           />
+
           <ActionButton
             imgUrl={defense}
             handleClick={() => makeAMove(2)}
@@ -135,6 +140,7 @@ const Battle = () => {
           />
         </div>
       </div>
+
       <PlayerInfo player={player1} playerIcon={player01Icon} mt />
 
       <GameInfo />

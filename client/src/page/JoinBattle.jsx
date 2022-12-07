@@ -30,7 +30,7 @@ const JoinBattle = () => {
       setShowAlert({
         status: true,
         type: "success",
-        messgae: `Joining ${battleName}`,
+        message: `Joining ${battleName}`,
       });
     } catch (error) {
       setErrorMessage(error);
