@@ -35,6 +35,9 @@ export const GlobalContextProvider = ({ children }) => {
   const [step, setStep] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const player1Ref = useRef();
+  const player2Ref = useRef();
+
   const navigate = useNavigate();
 
   // Set the wallet address to the state
@@ -99,6 +102,8 @@ export const GlobalContextProvider = ({ children }) => {
         walletAddress,
         setShowAlert,
         setUpdateGameData,
+        player1Ref,
+        player2Ref,
       });
     }
   }, [contract, step]);
@@ -169,6 +174,8 @@ export const GlobalContextProvider = ({ children }) => {
         setBattleGround,
         errorMessage,
         setErrorMessage,
+        player1Ref,
+        player2Ref,
       }}
     >
       {children}
